@@ -24,5 +24,5 @@ default["xca"]["packages"] = %w(
 default["xca"]["zypper"]["enabled"] = true
 default["xca"]["zypper"]["alias"] = "security"
 default["xca"]["zypper"]["title"] = "Security"
-default["xca"]["zypper"]["repo"] = "http://download.opensuse.org/repositories/security/openSUSE_#{node["platform_version"]}/"
+default["xca"]["zypper"]["repo"] = "http://download.opensuse.org/repositories/security/openSUSE_#{node["platform_version"].to_i.to_s == node["platform_version"] ? "Tumbleweed" : node["platform_version"]}/"
 default["xca"]["zypper"]["key"] = "#{node["xca"]["zypper"]["repo"]}repodata/repomd.xml.key"
