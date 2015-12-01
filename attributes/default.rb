@@ -21,8 +21,22 @@ default["xca"]["packages"] = %w(
   xca
 )
 
-default["xca"]["zypper"]["enabled"] = true
-default["xca"]["zypper"]["alias"] = "security"
-default["xca"]["zypper"]["title"] = "Security"
-default["xca"]["zypper"]["repo"] = "http://download.opensuse.org/repositories/security/openSUSE_#{node["platform_version"].to_i.to_s == node["platform_version"] ? "Tumbleweed" : node["platform_version"]}/"
-default["xca"]["zypper"]["key"] = "#{node["xca"]["zypper"]["repo"]}repodata/repomd.xml.key"
+case node["platform_family"]
+when "suse"
+  repo = case node["platform_version"]
+  when /\A13\.\d+\z/
+    "openSUSE_#{node["platform_version"]}"
+  when /\A42\.\d+\z/
+    "openSUSE_Leap_#{node["platform_version"]}"
+  when /\A\d{8}\z/
+    "openSUSE_Tumbleweed"
+  else
+    raise "Unsupported SUSE version"
+  end
+
+  default["xca"]["zypper"]["enabled"] = true
+  default["xca"]["zypper"]["alias"] = "security"
+  default["xca"]["zypper"]["title"] = "Security"
+  default["xca"]["zypper"]["repo"] = "http://download.opensuse.org/repositories/security/#{repo}/"
+  default["xca"]["zypper"]["key"] = "#{node["xca"]["zypper"]["repo"]}repodata/repomd.xml.key"
+end
